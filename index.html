@@ -1,90 +1,168 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Carte Rouge</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url('https://cdn.pixabay.com/photo/2018/04/27/19/47/protest-3355688_1280.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            margin: 0;
-            padding: 50px;
-            text-align: center;
-            color: #333;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<title>Carte Bleue Racisme</title>
 
-        .card-container {
-            background: #B22222; /* FOND ROUGE UNI */
-            border: 4px solid #5a0f0f;
-            border-radius: 20px;
-            padding: 60px;
-            max-width: 900px;
-            min-height: 450px;
-            margin: auto;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        }
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background:#5a0000;
+  font-family:Arial, sans-serif;
+  color:white;
+}
 
-        .symbols {
-            font-size: 4em;
-            margin-bottom: 25px;
-            color: #fff;
-        }
+h1{
+  margin-top:20px;
+}
 
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-        }
+.carte{
+  margin:auto;
+  width:620px;
+  height:400px;
+  perspective:1000px;
+}
 
-        #carte {
-            font-size: 2em;
-            line-height: 1.4;
-            margin-top: 20px;
-            font-weight: bold;
-            color: #ffffff;
-        }
+.inner{
+  width:100%;
+  height:100%;
+  transition:transform .7s;
+  transform-style:preserve-3d;
+  position:relative;
+}
 
-        button {
-            margin-top: 35px;
-            padding: 18px 40px;
-            font-size: 1.3em;
-            color: #fff;
-            background-color: #5a0f0f;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+.inner.flip{
+  transform:rotateY(180deg);
+}
 
-        button:hover {
-            background-color: #3a0707;
-        }
-    </style>
+.face{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#ffb3b3;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:30px;
+  backface-visibility:hidden;
+  color:#000;
+  font-weight:bold;
+}
 
-    <script>
-        const cartesRouges = [
-            "Une situation injuste apparaît dans l’actualité. (Recule de 1 case.)",
-            "Un acte de discrimination est signalé. (Perds un tour.)",
-            "Une manifestation dénonçant le racisme bloque la route. (Retourne à la dernière case Carte.)"
-        ];
+.back{
+  transform:rotateY(180deg);
+}
 
-        function montrerCarte() {
-            const carteAleatoire = cartesRouges[Math.floor(Math.random() * cartesRouges.length)];
-            document.getElementById('carte').innerText = carteAleatoire;
-        }
-    </script>
+.texte{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:1.9rem;
+}
+
+button{
+  background:#8b0000;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:1rem;
+}
+
+#nouvelle{
+  margin-bottom:25px;
+}
+</style>
 </head>
 
-<body onload="montrerCarte()">
-    <div class="card-container">
-        <div class="symbols">🚨✊</div>
-        <h1>Carte Rouge</h1>
-        <p id="carte"></p>
-        <button onclick="montrerCarte()">Afficher une autre carte</button>
+<body>
+
+<h1>CARTE BLEUE JEU DE L'OIE RACISME</h1>
+
+<div class="carte">
+  <div class="inner" id="inner">
+
+    <div class="face front">
+      <div class="texte" id="question"></div>
+      <button onclick="flip()">Voir la réponse</button>
     </div>
+
+    <div class="face back">
+      <div class="texte">Discussion collective / réflexion personnelle</div>
+      <button onclick="flip()">Voir la question</button>
+    </div>
+
+  </div>
+</div>
+
+<button id="nouvelle" onclick="nouvelleCarte()">Nouvelle carte</button>
+
+<script>
+const cartes = [
+"Pensez-vous avoir eu des propos racistes ou discriminatoires lors d’une prise en soin ?",
+"Citer des propos racistes que peut avoir le soignant envers le patient ? le patient envers le soignant ?",
+"Quel est votre rôle en tant que futur professionnel de santé ?",
+"Vrai ou Faux : Naomi Musenga appelle le SAMU pour des douleurs abdominales intenses et l’opératrice traite l’appel avec ironie.",
+"Comment pourrais-tu reconnaître des propos racistes dans le domaine du soin ? Donnez 3 éléments.",
+"Comment pourrais-tu prévenir des situations de racisme durant une prise en soin ?",
+"Comment sensibiliser les professionnels par rapport au racisme ?",
+"Comment pourrais-tu dénoncer des comportements racistes ?",
+"Quelles activités pourrais-tu mettre en place auprès de patients pour sensibiliser au racisme ?",
+"Grâce à l'humour on peut faire des blagues sans être pour autant raciste ?",
+"Rester silencieux face au racisme est une forme d’approbation ?",
+"D'où viennent selon toi la plupart de nos préjugés ?",
+"Penses-tu qu'il est possible de ne jamais avoir de stéréotypes ?",
+"As-tu une responsabilité dans la lutte contre le racisme ?",
+"Une personne raciste est-elle forcément une mauvaise personne ?",
+"Le silence protège l’oppresseur et pas la victime : es-tu d’accord ?",
+"Que ressentirais-tu si quelqu’un te faisait remarquer que tu as des propos racistes ?",
+"Peut-on être neutre face au racisme ?",
+"Que pourrait-on faire pour réduire le racisme dans le soin ?",
+"Avez-vous déjà été témoin de scènes racisées ?",
+"Cite des propos racistes déjà entendus dans le soin.",
+"Citer une phrase qui minimise la douleur du patient.",
+"Ai-je déjà supposé qu’un patient exagérait sa douleur selon son origine ?",
+"Est-ce que je crois plus facilement certains patients que d’autres ?",
+"Est-ce que j’explique différemment selon les profils de patients ?",
+"Comment réagis-je quand un patient parle mal français ?",
+"Quelles actions concrètes pour une prise en soin équitable ?",
+"Suis-je prêt à remettre en question mes pratiques ?",
+"Le stress lié aux discriminations impacte-t-il la santé ?",
+"Les plaintes pour discrimination sont-elles bien traitées ?",
+"La peur d’être mal soigné explique-t-elle un renoncement aux soins ?",
+"Comment réagir si un patient se sent discriminé ?",
+"Certaines populations consultent-elles plus tard ? Pourquoi ?",
+"D’où viennent mes représentations sur les populations ?",
+"Suis-je capable d’écouter un témoignage de racisme sans minimiser ?",
+"Comment intégrer cette sensibilisation dans ma pratique ?",
+"Vrai ou Faux : une patiente voilée doit retirer son voile pour un examen clinique.",
+"Échange sur le syndrome méditerranéen.",
+"Pensez-vous avoir des biais racistes ?",
+"Avez-vous conscience du racisme ordinaire au quotidien ?"
+];
+
+function nouvelleCarte(){
+  const i = Math.floor(Math.random()*cartes.length);
+  document.getElementById("question").textContent = cartes[i];
+  document.getElementById("inner").classList.remove("flip");
+}
+
+function flip(){
+  document.getElementById("inner").classList.toggle("flip");
+}
+
+nouvelleCarte();
+</script>
+
 </body>
 </html>
+
+
